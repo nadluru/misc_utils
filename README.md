@@ -4,3 +4,4 @@
 ```bash
 c3d t1w.nii -orient LSP -origin-voxel 50% -o t1w_reoriented_itksnap.nii
 ```
+The `-orient` input to the command could be obtained by visually inspecting an image in ITK-SNAP and running the Reorient Image tool. `-origin-voxel 50%` centers the image.
