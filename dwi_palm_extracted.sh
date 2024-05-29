@@ -116,7 +116,7 @@ sed -E '\''s:,:-:g;s/(.*)(:)([0-9].*)/\1,\3/g;s:^:{1tokens},{=1 s:.*cc_(.*)_in_m
 sed '1s:^:dwi,loneliness,index,source_mask,cluster_approach,stat,ptype,dwi_m,contrast,cluster,atlasname,regionname,probability\n:;s:tbss_harmonized_::g' > /study/midus3/processed_data/loneliness_DWI/palm/cluster_fslatlases_comprehensive.csv
 
 # might need to run on a system without x-forwarding
-find /study/midus3/processed_data/loneliness_DWI/palm/ -regex '.*/visualization/cc_C_mni/.*_cc_C[0-9]+_in_mni\.nii\.gz' | \
+find /study/midus3/processed_data/loneliness_DWI/palm/ -regex '.*/visualization/cc_C_mni/.*_cc_C[0-9]+_in_mni\.nii\.gz \| .*/visualization/cc_mni/.*cc_in_mni\.nii\.gz' | \
 parallel -k -j1 --plus --dry-run --rpl '{o} s:(.*visualization/).*:\1fsleyes:' '
 mkdir -p {o}
-~/CHMProjects/MIDUSProject/visualize_tbss_clusters.sh {} {o}'
+visualize_tbss_clusters.sh {} {o}'
