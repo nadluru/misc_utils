@@ -1,5 +1,8 @@
 # convert the design and contrast matrices to be compatible with palm
-parallel --bar Text2Vest {} {.}.fslready ::: /study/midus3/processed_data/loneliness_DWI/model_contrast_matrices/*.txt
+# palm expects .mat and .con
+parallel -k '
+parallel --bar --rpl '\''{p} s:.txt::'\'' -I // Text2Vest // {p}.{2} ::: /study/midus3/processed_data/loneliness_DWI/model_contrast_matrices/*_{1}.txt
+' ::: model contrast :::+ mat con
 
 # generating condor dag file for submitting palm jobs (#120)
 # dwi models (#4) x loneliness models (#10) x masks (#3)
