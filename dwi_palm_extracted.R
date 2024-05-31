@@ -134,7 +134,8 @@ list(data.frame(dwi = c(rep('dti', 3),
        mutate(dwi_m = paste0('m', row_number()), 
               stat = 'npc_fisher')) |>
   map2('Y:/midus3/processed_data/loneliness_DWI/', ~ 
-         ..2 |> (\(.)
+         ..2 |> # ..2 refers to the second argument passed to map2 which is the path above
+         (\(.) # ..2 is from now on referred to using . for simplicity of presentation
                  # reading the dwi in clusters
                  read.csv(paste0(., 
                                  'cluster_dwi_comprehensive.csv'), 
@@ -174,6 +175,7 @@ list(data.frame(dwi = c(rep('dti', 3),
                        group_by(across(-c(regionname, probability))) |> 
                        arrange(probability |> desc()) |> 
                        filter(row_number() == 1)) |> 
+                   # joining with the loneliness csv
                    left_join(
                      read_sav(paste0(., 
                                      'M3_P5_Loneliness_processed_reduced_diffusion.sav')) |> 
