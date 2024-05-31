@@ -70,9 +70,8 @@ sed 's:" "::g;1s:^:id,cluster,median,dwi_m_name,dwi,loneliness,index,source_mask
 # save individual cluster images (C[0-9]+) from the conected component (cc) images
 parallel --bar --plus 'seq -f "%02g" 1 $(fslstats {1} -R | awk '\''{print int($2)}'\'') | \
 parallel -I // --bar "
-fslmaths {1} -thr // -uthr // {1..}_C//"' \
-::: /study/midus3/processed_data/loneliness_DWI/palm/*/visualization/*cc.nii.gz \
-::: /study/midus3/processed_data/dmri_transformations/sharp_averages/average_fa.nii.gz
+fslmaths {} -thr // -uthr // {..}_C//"' \
+::: /study/midus3/processed_data/loneliness_DWI/palm/*/visualization/*cc.nii.gz
 
 # warpin cc_C[0-9]+ to mni with integer valued interpolation
 find /study/midus3/processed_data/loneliness_DWI/palm/ -regex '.*/visualization/.*_cc_C[0-9]+\.nii\.gz' | \
