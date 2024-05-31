@@ -70,8 +70,9 @@ sed 's:" "::g;1s:^:id,cluster,median,dwi_m_name,dwi,loneliness,index,source_mask
 # save individual cluster images (C[0-9]+) from the conected component (cc) images
 parallel --bar --plus 'seq -f "%02g" 1 $(fslstats {1} -R | awk '\''{print int($2)}'\'') | \
 parallel -I // --bar "
-fslmaths {} -thr // -uthr // {..}_C//"' \
-::: /study/midus3/processed_data/loneliness_DWI/palm/*/visualization/*cc.nii.gz
+fslmaths {1} -thr // -uthr // {1..}_C//"' \
+::: /study/midus3/processed_data/loneliness_DWI/palm/*/visualization/*cc.nii.gz \
+::: /study/midus3/processed_data/dmri_transformations/sharp_averages/average_fa.nii.gz
 
 # warpin cc_C[0-9]+ to mni with integer valued interpolation
 find /study/midus3/processed_data/loneliness_DWI/palm/ -regex '.*/visualization/.*_cc_C[0-9]+\.nii\.gz' | \
@@ -119,3 +120,7 @@ find /study/midus3/processed_data/loneliness_DWI/palm/ -regex '.*/visualization/
 parallel -k -j1 --plus --dry-run --rpl '{o} s:(.*visualization/).*:\1fsleyes:' '
 mkdir -p {o}
 visualize_tbss_clusters.sh {} {o}'
+
+# organizing the pdfs by lonelinessmodel, mask, cluster approach, stat, and ptype
+mkdir -p /study/midus3/processed_data/loneliness_DWI/palm/clusters_comprehensive_pdfs_organized
+parallel --bar -j24 'pdfunite $(ls {2//}/clusters_comprehensive_{cc_,}pdfs/{1}*{2/}*{3}*{4}*{5}*{6}*.pdf 2>/dev/null) {2//}/clusters_comprehensive_pdfs_organized/{1}_{2/}_{3}_{4}_{5}_{6}_clusters.pdf 2>/dev/null' ::: dti dki noddi wmti ::: /study/midus3/processed_data/loneliness_DWI/palm/*_model ::: average_fa_1mm_skeleton hippo_mask_study Amygdala_mask_study ::: tfce vox ::: npc tstat ::: uncp fwep mfwep
