@@ -39,6 +39,6 @@ gl.minmax(1, 0, 1)^
 gl.opacity(1, 70)^
 gl.linecolor(0, 255, 0)^
 gl.mosaic("S L+ V 0 H 0 " + ";".join(map(lambda g: " ".join(map(str, g)), itertools.zip_longest(*[iter(range(-36, 38, 2))]*5, fillvalue=""))) + " A X R 0")^
-gl.savebmp("/Users/adluru/Documents/midus/dwi_discrimination/hippo_figures/{/..}.png")^
+gl.savebmp("/path/to/hippo_figures/{/..}.png")^
 gl.quit()^'\''
 ' ::: /path/to/wmti_eas_de_perp_age_inter_hidiscage_gt_lodiscage_sig_in_MNI.nii.gz /path/to/wmti_eas_de_perp_ageonly_inter_hidiscage_gt_lodiscage_sig_in_MNI.nii.gz /path/to/mtnoddi_mtodi_none_main_hidisc_gt_lodisc_sig_in_MNI.nii.gz
