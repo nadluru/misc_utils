@@ -64,3 +64,44 @@ gl.mosaic("A L+ V 0 H 0 " + ";".join(map(lambda g: " ".join(map(str, g)), iterto
 gl.savebmp("{..}.png")^
 gl.quit()^'\''
 ' ::: ~/path/to/1-p_files/*.nii.gz
+
+# whole brain axial (thr 1-p linear interp)
+parallel --bar -j1 --plus '/Applications/MRIcroGL.app/Contents/MacOS/MRIcroGL -s '\''import gl^
+import itertools^
+gl.resetdefaults()^
+#gl.colorbarposition(0)^
+gl.fullscreen(1)^
+gl.scriptformvisible(0)^
+gl.toolformvisible(0)^
+gl.bmpzoom(2)^
+gl.backcolor(0, 0, 0)^
+gl.loadimage("mni152")^
+gl.overlayload("{}")^
+gl.minmax(1, 0.9, 1)^
+gl.opacity(1, 70)^
+gl.colorname(1, "1red")^
+gl.linecolor(0, 255, 0)^
+gl.mosaic("A L+ V 0 H 0 " + ";".join(map(lambda g: " ".join(map(str, g)), itertools.zip_longest(*[iter(range(-35, 76, 2))]*7, fillvalue=""))) + " S X R 0")^
+gl.savebmp("{..}.png")^
+gl.quit()^'\''
+' ::: ~/Documents/midus/dwi_discrimination/mni_clusters_1_p_linear/whole_brain/*.nii.gz
+
+# hippo sagittal (thr 1-p linear interp)
+parallel --bar -j1 --plus '/Applications/MRIcroGL.app/Contents/MacOS/MRIcroGL -s '\''import gl^
+import itertools^
+gl.resetdefaults()^
+gl.fullscreen(1)^
+gl.scriptformvisible(0)^
+gl.toolformvisible(0)^
+gl.bmpzoom(2)^
+gl.backcolor(0, 0, 0)^
+gl.loadimage("mni152")^
+gl.overlayload("{}")^
+gl.minmax(1, 0.9, 1)^
+gl.opacity(1, 70)^
+gl.colorname(1, "1red")^
+gl.linecolor(0, 255, 0)^
+gl.mosaic("S L+ V 0 H 0 " + ";".join(map(lambda g: " ".join(map(str, g)), itertools.zip_longest(*[iter(range(-56, 54, 2))]*7, fillvalue=""))) + " C X R 0")^
+gl.savebmp("{..}.png")^
+gl.quit()^'\''
+' ::: ~/Documents/midus/dwi_discrimination/mni_clusters_1_p_linear/hippo/*.nii.gz
