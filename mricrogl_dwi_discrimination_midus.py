@@ -84,7 +84,7 @@ gl.linecolor(0, 255, 0)^
 gl.mosaic("A L+ V 0 H 0 " + ";".join(map(lambda g: " ".join(map(str, g)), itertools.zip_longest(*[iter(range(-35, 76, 2))]*7, fillvalue=""))) + " S X R 0")^
 gl.savebmp("{..}.png")^
 gl.quit()^'\''
-' ::: ~/Documents/midus/dwi_discrimination/mni_clusters_1_p_linear/whole_brain/*.nii.gz
+' ::: dwi_discrimination/mni_clusters_1_p_linear/whole_brain/*.nii.gz
 
 # hippo sagittal (thr 1-p linear interp)
 parallel --bar -j1 --plus '/Applications/MRIcroGL.app/Contents/MacOS/MRIcroGL -s '\''import gl^
@@ -104,4 +104,4 @@ gl.linecolor(0, 255, 0)^
 gl.mosaic("S L+ V 0 H 0 " + ";".join(map(lambda g: " ".join(map(str, g)), itertools.zip_longest(*[iter(range(-56, 54, 2))]*7, fillvalue=""))) + " C X R 0")^
 gl.savebmp("{..}.png")^
 gl.quit()^'\''
-' ::: ~/Documents/midus/dwi_discrimination/mni_clusters_1_p_linear/hippo/*.nii.gz
+' ::: dwi_discrimination/mni_clusters_1_p_linear/hippo/*.nii.gz
