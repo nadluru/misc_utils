@@ -11,3 +11,7 @@ The `-orient` input to the command could be obtained by visually inspecting an i
 ```bash
 find /path | parallel --progress touch {}
 ```
+## citation
+Please cite the following if you use the wonderful GNU parallel by Ole Tang in your work. You can look for official recommendation by running `parallel --citation`.
+
+Tange, Ole. (2025). GNU Parallel is a general parallelizer to run multiple serial command line programs in parallel without changing them. [DOI](https://doi.org/10.5281/zenodo.14715132)
