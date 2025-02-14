@@ -56,3 +56,78 @@ condor_submit_dag /scratch/adluru/bpa_date.dag
 # space calculations
 # output paths
 # output dag to your location and submit dag
+
+# Monica adapted and ran the code and generated the pairwise fiber bundles.
+
+# 02/14/2025 bpa: rendering the fiber bundles pairwise
+
+# fod template/anatomical image
+ls /study3/mover01/hartwell_mover01_noASDrelated/T1w_template/antsMultivariateTemplateConstruction/template0_hd-bet.nii.gz
+# fiber bundles folder
+Tracts out:
+ls /study3/mover01/processed-data/derivatives/qmri-neuropipe/studytemplate/dwi/tractography/tckgen_angle_template/tck_files/individual_tck/angle_*/highthroughput_tck_extraction/
+
+echo "4 42
+5 43
+8 32
+9 33
+1 23
+2 23
+10 15
+11 14
+12 15
+13 14
+14 20
+15 19
+46 58
+47 57
+3 58
+3 57
+32 57
+33 58
+8 57
+9 58
+50 56
+51 55
+4 60
+5 59
+46 60
+47 59
+23 56
+23 55
+46 59
+47 60
+57 60
+58 59
+10 62
+11 61
+32 62
+33 61
+36 68
+37 67
+50 62
+51 61
+27 64
+28 63" | datamash transpose -t ' '
+
+# examples
+mkdir -p /study3/mover01/processed-data/derivatives/qmri-neuropipe/studytemplate/dwi/tractography/tckgen_angle_template/tck_file_pngs/angle_{4,15,30,45,90}
+anatomical_scan=/study3/mover01/hartwell_mover01_noASDrelated/T1w_template/antsMultivariateTemplateConstruction/template0_hd-bet.nii.gz
+mrview -load $anatomical_scan -fullscreen -tractography.load /study3/mover01/processed-data/derivatives/qmri-neuropipe/studytemplate/dwi/tractography/tckgen_angle_template/tck_files/individual_tck/angle_30/highthroughput_tck_extraction/tracks_4_42.tck -tractography.slab -1 -capture.folder /study3/mover01/processed-data/derivatives/qmri-neuropipe/studytemplate/dwi/tractography/tckgen_angle_template/tck_file_pngs/angle_30 -capture.prefix angle30_node4_node42.png -capture.grab -mode 1 -noannotations -exit # on inca need to figure out libgsl library install etc.
+
+# trying it on andromeda/windows locally.
+anatomical_scan=/y/mover01/hartwell_mover01_noASDrelated/T1w_template/antsMultivariateTemplateConstruction/template0_hd-bet.nii.gz
+mrview -load $anatomical_scan -mode 2 -noannotations -fullscreen -tractography.load /y/mover01/processed-data/derivatives/qmri-neuropipe/studytemplate/dwi/tractography/tckgen_angle_template/tck_files/individual_tck/angle_30/highthroughput_tck_extraction/tracks_4_42.tck -tractography.slab -1 -capture.folder /y/mover01/processed-data/derivatives/qmri-neuropipe/studytemplate/dwi/tractography/tckgen_angle_template/tck_file_pngs/angle_30 -capture.prefix template_angle30_node4_node42.png -capture.grab -exit
+
+# pattern
+anatomical_scan=/y/mover01/hartwell_mover01_noASDrelated/T1w_template/antsMultivariateTemplateConstruction/template0_hd-bet.nii.gz
+parallel --dry-run --header : mrview -load $anatomical_scan -mode 2 -noannotations -fullscreen -tractography.load /y/mover01/processed-data/derivatives/qmri-neuropipe/studytemplate/dwi/tractography/tckgen_angle_template/tck_files/individual_tck/angle_30/highthroughput_tck_extraction/tracks_{node1}_{node2}.tck -tractography.slab -1 -capture.folder /y/mover01/processed-data/derivatives/qmri-neuropipe/studytemplate/dwi/tractography/tckgen_angle_template/tck_file_pngs/angle_{angles} -capture.prefix template_angle{angles}_node{node1}_node{node2}.png -capture.grab -exit ::: angles 4 15 30 45 90 ::: node1 4 5 8 9 1 2 10 11 12 13 14 15 46 47 3 3 32 33 8 9 50 51 4 5 46 47 23 23 46 47 57 58 10 11 32 33 36 37 50 51 27 28 :::+ node2 42 43 32 33 23 23 15 14 15 14 20 19 58 57 58 57 57 58 57 58 56 55 60 59 60 59 56 55 59 60 60 59 62 61 62 61 68 67 62 61 64 63
+
+# angles: 4 15 30 45 90
+# File names: tracks_node1_node2.tck (ex: tracks_56_61.tck)
+
+# next steps
+# install parallel on mac using homebrew
+# update the paths
+# do a dry-run copy one output and run an example and then batch.
+# if you need to run one at a time just pass -j 1
