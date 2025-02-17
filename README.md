@@ -19,7 +19,7 @@ parallel 'echo {},$(mri_segstats --subject {} --etiv-only | grep -i etiv | sed "
 ```
 ## extracting tissue volumes from freesurfer outputs
 ```bash
-awk '{print FILENAME ", " $0}' /path/to/toplevel/freesurfer/output/*/stats/brainvol.stats | grep -iE 'brainsegnotvent|subcortgray|cortex|whitematter' | sed -E 's:.*output/(.*)/stats.*:\1,&:' | awk -F, '{print $1","$5","$6}' | sed 's:, :,:g;1s:^:id,global,volume(mm^3)\n:' > /path/to/csv/output/fs_tissue_volumes.csv
+awk '{print FILENAME ", " $0}' /path/to/toplevel/freesurfer/output/*/stats/brainvol.stats | grep -iE 'brainsegnotvent|subcortgray|cortex|whitematter' | sed -E 's:.*output/(.*)/stats.*:\1,&:' | awk -F, '{print $1","$5","$6}' | sed 's:, :,:g;1s:^:id,tissue,volume(mm^3)\n:' > /path/to/csv/output/fs_tissue_volumes.csv
 ```
 ## citation
 Please cite the following if you use the wonderful GNU parallel by Ole Tang in your work. You can look for official recommendation by running `parallel --citation`.
