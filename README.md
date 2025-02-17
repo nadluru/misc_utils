@@ -11,6 +11,12 @@ The `-orient` input to the command could be obtained by visually inspecting an i
 ```bash
 find /path | parallel --progress touch {}
 ```
+## extracting intracranial volumes from freesurfer outputs
+```bash
+export SUBJECTS_DIR=/path/to/toplevel/freesurfer/output
+cd $SUBJECTS_DIR
+parallel 'echo {},$(mri_segstats --subject {} --etiv-only | grep -i etiv | sed "s:.*= ::;s: .*::;1d")' ::: subject_id_prefix* | sed '1s:^:id,icv(mm^3)\n:' > /path/to/csv/output/fs_icv.csv
+```
 ## citation
 Please cite the following if you use the wonderful GNU parallel by Ole Tang in your work. You can look for official recommendation by running `parallel --citation`.
 
