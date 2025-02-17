@@ -17,6 +17,10 @@ export SUBJECTS_DIR=/path/to/toplevel/freesurfer/output
 cd $SUBJECTS_DIR
 parallel 'echo {},$(mri_segstats --subject {} --etiv-only | grep -i etiv | sed "s:.*= ::;s: .*::;1d")' ::: subject_id_prefix* | sed '1s:^:id,icv(mm^3)\n:' > /path/to/csv/output/fs_icv.csv
 ```
+## extracting tissue volumes from freesurfer outputs
+```bash
+awk '{print FILENAME ", " $0}' /path/to/toplevel/freesurfer/output/*/stats/brainvol.stats | grep -iE 'brainsegnotvent|subcortgray|cortex|whitematter' | sed -E 's:.*output/(.*)/stats.*:\1,&:' | awk -F, '{print $1","$5","$6}' | sed 's:, :,:g;1s:^:id,global,volume(mm^3)\n:' > /path/to/csv/output/fs_tissue_volumes.csv
+```
 ## citation
 Please cite the following if you use the wonderful GNU parallel by Ole Tang in your work. You can look for official recommendation by running `parallel --citation`.
 
