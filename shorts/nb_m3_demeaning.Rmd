@@ -1,0 +1,68 @@
+---
+title: "On demeaning categorical variables"
+output: 
+  html_notebook:
+    toc: true
+    toc_float: true
+---
+
+# libraries
+```{r}
+c('tidyverse', 'broom') |> lapply(require, character.only = T)
+```
+
+# table
+```{r}
+readRDS('y:/midus3/processed_data/dmri_transformations/palm_dwi_affect/visualization/conjunction/conjunction_vis2.rds') |>
+  filter(model == 'UCLA_Lonely',
+         mask_label == 1,
+         measure == 'awf',
+         mask_type == 'bin',
+         pvalue_type == 'uncp',
+         cluster_approach == 'tfce',
+         stat_type == 'npc_fisher',
+         source_mask == 'hippo_mask_study') |> 
+  mutate(lonely_dichot_factor = Lonely_dichot |> 
+           as.factor()) -> table
+table
+```
+# model matrices
+## as group factor
+```{r}
+model.matrix(~lonely_dichot_factor + C5PAGE, table) |> as.tibble()
+```
+
+## not as a factor demeaned
+```{r}
+model.matrix(~Lonely_dichot + C5PAGE, table) |> as.tibble()
+```
+
+## as factor interaction
+```{r}
+model.matrix(~lonely_dichot_factor * C5PAGE, table) |> as.tibble()
+```
+
+## not as factor interaction
+```{r}
+model.matrix(~Lonely_dichot * C5PAGE, table) |> as.tibble()
+```
+# models
+## as factor
+```{r}
+lm(mean ~ lonely_dichot_factor + C5PAGE, table) |> tidy()
+```
+
+## not as factor demeaned
+```{r}
+lm(mean ~ Lonely_dichot + C5PAGE, table) |> tidy()
+```
+
+## factor interaction
+```{r}
+lm(mean ~ lonely_dichot_factor * C5PAGE, table2) |> tidy()
+```
+
+## not as factor ineraction
+```{r}
+lm(mean ~ Lonely_dichot * C5PAGE, table2) |> tidy()
+```
