@@ -1,0 +1,57 @@
+---
+title: "Example to gather the results from recon-all-clinical.sh outputs"
+output: 
+  html_notebook:
+    toc: true
+    toc_float: true
+---
+
+# libraries
+```{r}
+c('ggseg', 
+  'tidyverse', 
+  'furrr') |> 
+  lapply(require, character.only = T)
+```
+
+# setting up multiple processors
+```{r}
+plan(multisession, workers = 4)
+```
+
+# gathering the following outputs
+- aparc.stats (cortical measures in desikan killiany regions)
+- aparc.a2009s.stats (cortical measures in destrieux regions)
+- aparc.pial.stats (pial measures)
+- aparc.DKTatlas.stats (cortical measures from regions of the desikan killiany tourville atlas)
+
+Please change the paths to the appropriate input and output
+
+- input /path/to/freesurfer_subjects_dir
+- output /path/to/fs_measures_gathered.csv
+
+```{r}
+list(
+  list("aparc.stats$",
+       "aparc.a2009s.stats$",
+       "aparc.pial.stats$",
+       "aparc.DKTatlas.stats$"
+  ),
+  list("fs_cortical_measures_desikan_killay",
+       "fs_cortical_measures_destrieux",
+       "fs_cortical_pial_measures",
+       "fs_dktatlas_measures"
+  )
+) |>
+  future_pmap_dfr(~{
+    read_atlas_files("/path/to/freesurfer_subjects_dir", ..1) |>
+      pivot_longer(-c(subject, label), 
+                   names_to = 'measure_name', 
+                   values_to = 'measure_value') |> 
+      mutate(measure_type = ..2)
+  },
+  .progress = T) |> 
+  write.csv(paste0('/path/to/fs_measures_gathered.csv'),
+            row.names = F,
+            quote = F)
+```
